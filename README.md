@@ -65,3 +65,25 @@
 از نشانیِ حل‌شدهٔ خودِ اسکریپت `assets/mdx.js` گرفته می‌شود و نشانی مقاله‌ها و
 تصویرها نسبت به آن ساخته می‌شود؛ به همین دلیل سایت زیر هر زیرمسیری — از جمله
 `/consciousness-theory/` — بدون تغییر کار می‌کند.
+
+## دیپلوی با یک دستور CLI (بدون مرورگر)
+
+به‌روزرسانی‌های معمول سایت — یعنی همهٔ فایل‌های متنی (`index.html`،
+`assets/*.js`، `assets/articles/*.mdx`، `README.md`) — با یک دستور از خط فرمان
+push می‌شوند و نیازی به مرورگر و سایت گیت‌هاب ندارند:
+
+```bash
+github push-files --owner hooshemadhoosh --repo consciousness-theory \
+  --branch main --message "Update site" \
+  --source-dir ~/workspace/your_files/consciousness-theory-bundle \
+  --paths-file <manifest>
+```
+
+(`<manifest>` فایلی با مسیرهای نسبیِ فایل‌های متنیِ تغییرکرده است که با بایت NUL
+از هم جدا شده‌اند؛ اسکریپت `deploy.sh` در `~/workspace/goals/consciousness-theory/`
+همین کار را می‌کند.)
+
+دو محدودیت: این روش فقط فایل‌های متنی UTF-8 را می‌پذیرد — تصویرها (`.webp`،
+`.jpg`) با آن push نمی‌شوند و اگر عکسی عوض شد، همان یک بار باید با مرورگر
+آپلود شود؛ و `git` روی SSH از این ماشین کار نمی‌کند چون پروکسی خروجی، اتصال
+SSH (پورت ۲۲ و ۴۴۳) را ریست می‌کند.
