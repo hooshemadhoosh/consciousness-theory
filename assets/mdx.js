@@ -19,6 +19,15 @@
      ---
      متن مقاله با مارک‌داون + کامپوننت‌ها + HTML خام (برای SVG و جدول‌های پیچیده)
 
+   فرمول ریاضی (LaTeX، با KaTeX که قالب مادر از CDN می‌خواند):
+     $...$              فرمول درون‌خطی، در هر جای متن (پاراگراف، تیتر،
+                        فهرست، جدول و درون کامپوننت‌ها)
+     ```tex ... ```     بلوک فرمول نمایشی؛ چند خط با محیط aligned نوشته
+                        می‌شود. بلوکِ تنها $$...$$ هم همین کار را می‌کند.
+     اگر KaTeX لود نشده باشد یا فرمول خطا داشته باشد، به‌جای رندر خراب
+     خودِ متن منبع لاتکس در جعبه‌ای خوانا (کلاس math-src) می‌نشیند تا
+     فرمول در هیچ حالتی از دست نرود.
+
    کامپوننت‌های آماده (در قالب مادر تعریف شده‌اند):
      <CaseLab> ... ```json ... ``` ... </CaseLab>   آزمایشگاه داوری تعریف‌ها
      <Callout type="warn|key" title="...">متن</Callout>
@@ -98,12 +107,43 @@
     return { meta: meta, body: body };
   }
 
+  /* ---------- فرمول ریاضی: LaTeX با KaTeX؛ بدون رندرر، منبع خوانا می‌ماند ---------- */
+  function escTex(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function renderMath(tex, display) {
+    tex = String(tex).replace(/^\s+|\s+$/g, '');
+    if (typeof window !== 'undefined' && window.katex &&
+        typeof window.katex.renderToString === 'function') {
+      try {
+        var html = window.katex.renderToString(tex, {
+          displayMode: !!display, throwOnError: true, strict: false
+        });
+        return display
+          ? '<div class="math math-display" dir="ltr">' + html + '</div>'
+          : '<span class="math math-inline" dir="ltr">' + html + '</span>';
+      } catch (e) { /* فرمول خراب: پایین، خودِ منبع لاتکس خوانا نشان داده می‌شود */ }
+    }
+    return display
+      ? '<pre class="math-src" dir="ltr"><code>' + escTex(tex) + '</code></pre>'
+      : '<code class="math-src" dir="ltr">' + escTex(tex) + '</code>';
+  }
+
   /* ---------- مارک‌داون درون‌خطی؛ برچسب‌های HTML دست‌نخورده می‌مانند ---------- */
   function inline(text, baseDir) {
     var parts = text.split(/(<[^>]+>)/g);
     for (var i = 0; i < parts.length; i++) {
       if (parts[i].charAt(0) === '<') continue;
       var s = parts[i];
+      /* فرمول درون‌خطی $...$ پیش از هر پردازش دیگری بیرون کشیده و رندر
+         می‌شود و جایش نشانه می‌نشیند، تا نشانه‌های مارک‌داون (ستاره،
+         براکت و مانند آن) داخل لاتکس دست نخورند؛ در پایان نشانه‌ها با
+         خروجی رندرشده جایگزین می‌شوند. */
+      var maths = [];
+      s = s.replace(/\$([^$\n]+)\$/g, function (m, tex) {
+        maths.push(renderMath(tex, false));
+        return '@@MATH' + (maths.length - 1) + '@@';
+      });
       s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (m, alt, src) {
         return '<img src="' + resolvePath(baseDir, src) + '" alt="' + alt + '" />';
       });
@@ -113,6 +153,9 @@
       s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       s = s.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+      if (maths.length) {
+        s = s.replace(/@@MATH(\d+)@@/g, function (m, idx) { return maths[+idx]; });
+      }
       parts[i] = s;
     }
     return parts.join('');
@@ -246,8 +289,16 @@
     /* خط جداکننده */
     if (/^(-{3,}|\*{3,})$/.test(t)) return '<hr />';
 
-    /* حصار کد */
+    /* بلوک فرمول نمایشیِ تنها: $$...$$ */
+    if ((m = t.match(/^\$\$([\s\S]*?)\$\$$/))) {
+      return renderMath(m[1], true);
+    }
+
+    /* حصار کد؛ حصار tex/math/latex بلوک فرمول نمایشی است */
     if ((m = t.match(/^```(\w*)\n([\s\S]*?)```$/))) {
+      if (m[1] === 'tex' || m[1] === 'math' || m[1] === 'latex') {
+        return renderMath(m[2], true);
+      }
       return '<pre dir="ltr"><code>' + m[2].replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</code></pre>';
     }
 

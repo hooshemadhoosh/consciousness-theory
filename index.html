@@ -56,6 +56,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800;900&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
 <style>
 :root{
   --bg:#fafaf7; --paper:#ffffff;
@@ -614,6 +615,44 @@ table.cmp{width:100%;border-collapse:collapse;margin:20px 0;font-size:15.5px;lin
 #articleView .papershot img{width:100%;height:auto;display:block}
 #articleView .papershot figcaption{font-size:.8rem;line-height:1.9;color:var(--muted,#68766f);margin-top:8px;text-align:center}
 #articleView .papershot figcaption .ltr{direction:ltr;unicode-bidi:embed;font-family:Georgia,"Times New Roman",serif}
+/* ---------- برشِ شکل از متن مقالهٔ اصلی (در MDX با کلاس figshot) ----------
+   برخلاف papershot که صفحهٔ نخست مقاله است، این‌جا خودِ شکلِ مقاله از
+   PDF اصلی بریده شده و پهن‌تر نشان داده می‌شود تا جزئیات شکل خوانا بماند؛
+   پس‌زمینهٔ سفیدِ خودِ صفحهٔ مقاله حفظ می‌شود تا شکل در هر دو تم درست دیده شود. */
+#articleView .figshot{margin:30px auto;max-width:680px;text-align:center}
+#articleView .figshot a{display:block;border:1px solid var(--line,#ddd);border-radius:8px;overflow:hidden;background:#fff;box-shadow:var(--shadow,0 4px 16px rgba(0,0,0,.10));line-height:0}
+#articleView .figshot img{width:100%;height:auto;display:block}
+#articleView .figshot figcaption{font-size:.82rem;line-height:1.95;color:var(--muted,#68766f);margin-top:9px;text-align:center}
+#articleView .figshot figcaption .ltr{direction:ltr;unicode-bidi:embed;font-family:Georgia,"Times New Roman",serif}
+/* ---------- شکل اختصاصیِ درون مقاله (نمودار و اینفوگرافیک SVG) ---------- */
+#articleView .diagram{margin:30px 0;padding:22px 20px 10px;border:1px solid var(--line,#ddd3bf);border-radius:14px;background:var(--surface,var(--paper,#fff));box-shadow:var(--shadow,none)}
+#articleView .diagram .d-title{font-weight:900;font-size:1rem;margin:0 0 2px;text-align:center}
+#articleView .diagram .d-sub{font-size:.85rem;color:var(--muted,#68766f);text-align:center;margin:0 0 14px;line-height:1.9}
+#articleView .diagram svg{width:100%;height:auto;display:block}
+#articleView .diagram figcaption{font-size:.83rem;line-height:1.95;color:var(--muted,#68766f);margin-top:10px;text-align:center;border-top:1px dashed var(--line,#ddd3bf);padding-top:9px}
+#articleView .diagram .svg-label{font-family:"Vazirmatn",Tahoma,sans-serif}
+#articleView .diagram table.tpm{margin:6px auto 4px;border-collapse:collapse;direction:ltr;font-size:.86rem;line-height:1.6}
+#articleView .diagram table.tpm th,#articleView .diagram table.tpm td{border:1px solid var(--line,#ddd3bf);padding:5px 10px;text-align:center;min-width:44px}
+#articleView .diagram table.tpm th{background:var(--surface2,var(--teal-wash,#eef3f0));font-weight:800}
+#articleView .diagram table.tpm td.on{background:var(--teal,#0e4f4a);color:#fff;font-weight:800}
+#articleView .diagram table.tpm td.cur{outline:2px solid var(--ochre,#a96f14);outline-offset:-2px;font-weight:800}
+/* ---------- فرمول‌های ریاضی (KaTeX) ----------
+   فرمول نمایشی در جعبه‌ای هم‌خانوادهٔ بقیهٔ جعبه‌های مقاله می‌نشیند و
+   رنگش را از متن همان تم به ارث می‌برد (رنگ KaTeX همان currentColor
+   است)، پس در تم روشن و تیرهٔ هر سه قالب خواناست. روی پهنای کم، جعبه
+   درون خودش افقی اسکرول می‌شود و فرمول هرگز از صفحه بیرون نمی‌زند.
+   اگر KaTeX لود نشود، مفسر به‌جای رندر، متن منبع لاتکس را با کلاس
+   math-src نشان می‌دهد؛ آن هم این‌جا خوانا و چپ‌به‌راست سبک گرفته است. */
+#articleView .math-display{margin:26px 0;padding:22px 18px;border:1px solid var(--line,#ddd3bf);border-radius:12px;background:var(--surface,var(--paper,#fff));box-shadow:var(--shadow,none);overflow-x:auto;overflow-y:hidden;text-align:center;direction:ltr}
+#articleView .math-display .katex-display{margin:0;padding:2px 0}
+#articleView .math-display .katex{font-size:1.07em}
+#articleView .math-inline{direction:ltr;unicode-bidi:isolate}
+#articleView .katex{color:inherit}
+#articleView .math-src{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.9em;color:inherit}
+#articleView pre.math-src{margin:26px 0;padding:18px;border:1px solid var(--line,#ddd3bf);border-radius:12px;background:var(--surface,var(--paper,#fff));overflow-x:auto;text-align:left;line-height:1.7}
+@media (max-width:640px){
+  #articleView .math-display{padding:16px 10px;margin:20px 0}
+}
 </style>
 <style>
 /* ---------- گذر موبایل: خوانایی و لمس روی گوشی، بدون تغییر دسکتاپ ----------
@@ -852,6 +891,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:none}
 </div>
 
 <script src="assets/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script src="assets/mdx.js"></script>
 <script>
 (function(){

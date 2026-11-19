@@ -50,9 +50,13 @@ meta:
 
 صورت استاندارد مدل جمعیتی برای نرخ شلیک r یک جمعیت تحریکی بازگشتی:
 
-<pre dir="ltr"><code>τ dr/dt = −r + F( w·r + I_stim − inhibition + noise )
-F(x) = firing-rate transfer function (threshold–nonlinear)
-w = recurrent synaptic strength, dominated by slow NMDA current</code></pre>
+```tex
+\begin{aligned}
+\tau \frac{dr}{dt} &= -r + F\bigl(w \cdot r + I_{\mathrm{stim}} - \text{inhibition} + \text{noise}\bigr) \\
+F(x) &= \text{firing-rate transfer function (threshold--nonlinear)} \\
+w &= \text{recurrent synaptic strength, dominated by slow NMDA current}
+\end{aligned}
+```
 
 همهٔ نتایج بعدی از تحلیل همین‌گونه معادلات بیرون می‌آید: نقاط ثابت کجایند، کدام پایدار است، و نویز سامانه را میان آن‌ها چگونه جابه‌جا می‌کند. زبان تحلیل، زبان فیزیک است: چشم‌انداز انرژی، حوضهٔ جاذبه، دوشاخگی <span class="ltr">(bifurcation)</span>.
 
