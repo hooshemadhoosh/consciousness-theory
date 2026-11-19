@@ -4,6 +4,53 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
+<script>
+/* تم روشن/تیره: انتخاب ذخیره‌شدهٔ کاربر پیش از رندر روی <html data-theme>
+   می‌نشیند تا صفحه از همان ابتدا با همان تم باز شود و چشمک نزند. بدون
+   انتخاب، data-theme نیست و صفحه مثل قبل از تم سیستم پیروی می‌کند. */
+(function(){
+  var KEY = 'consciousness-notes-theme';
+  var stored = null;
+  try{ stored = localStorage.getItem(KEY); }catch(e){}
+  if(stored === 'dark' || stored === 'light'){
+    document.documentElement.setAttribute('data-theme', stored);
+  }
+  window.__effectiveTheme = function(){
+    var v = document.documentElement.getAttribute('data-theme');
+    if(v === 'dark' || v === 'light') return v;
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  };
+  window.__syncThemeButtons = function(){
+    var dark = window.__effectiveTheme() === 'dark';
+    Array.prototype.forEach.call(document.querySelectorAll('.theme-toggle'), function(b){
+      b.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      b.setAttribute('aria-label', dark ? 'تغییر به تم روشن' : 'تغییر به تم تیره');
+      b.setAttribute('title', dark ? 'تم روشن' : 'تم تیره');
+    });
+  };
+  document.addEventListener('click', function(e){
+    var btn = e.target && e.target.closest ? e.target.closest('.theme-toggle') : null;
+    if(!btn) return;
+    var next = window.__effectiveTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem(KEY, next); }catch(err){}
+    window.__syncThemeButtons();
+    /* رنگ نوار پیشرفت از تم مقاله گرفته شده بود؛ با عوض‌شدن تم از نو خوانده می‌شود */
+    var themeEl = document.querySelector('#articleRoot > div');
+    var pb = document.getElementById('progress');
+    if(themeEl && pb){
+      var cs = window.getComputedStyle(themeEl);
+      var c = cs.getPropertyValue('--accent').trim() || cs.getPropertyValue('--teal').trim();
+      if(c) pb.style.background = c;
+    }
+  });
+  document.addEventListener('DOMContentLoaded', function(){ window.__syncThemeButtons(); });
+  if(window.matchMedia){
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if(mq.addEventListener) mq.addEventListener('change', function(){ window.__syncThemeButtons(); });
+  }
+})();
+</script>
 <link rel="icon" href="data:," />
 <title>یادداشت‌های نظریهٔ آگاهی — خانه</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -557,7 +604,7 @@ table.cmp{width:100%;border-collapse:collapse;margin:20px 0;font-size:15.5px;lin
   #articleView .biocard-portrait{float:none;width:150px;margin:0 auto 14px}
 }
 @media (prefers-reduced-motion: reduce){#articleView .biocard-chev{transition:none}}
-.article-loading,.article-error{max-width:720px;margin:0 auto;padding:90px 20px 60px;font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;color:#3d4a44;line-height:2}
+.article-loading,.article-error{max-width:720px;margin:0 auto;padding:90px 20px 60px;font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;color:var(--ink-soft,#3d4a44);line-height:2}
 @media (prefers-reduced-motion: reduce){.site-nav{transition:none}}
 /* ---------- تصویر صفحهٔ نخست مقالهٔ کلیدی (در متن MDX با کلاس papershot) ----------
    تصویر کوچک و وسط‌چین از صفحهٔ اول مقاله‌ای که ارجاع داده شده است؛ با کلیک
@@ -666,13 +713,56 @@ html{-webkit-text-size-adjust:100%}
   #articleView .papershot{max-width:min(280px,100%)}
 }
 </style>
+<style>
+/* ---------- تم روشن/تیره با انتخاب کاربر (دکمهٔ کوچک در نوار شناور) ----------
+   انتخاب کاربر روی <html data-theme="dark|light"> می‌نشیند و بر
+   prefers-color-scheme غلبه می‌کند؛ بدون انتخاب، هیچ‌کدام از این قواعد
+   اعمال نمی‌شود و رفتار قبلی (پیروی از سیستم) می‌ماند. مقادیر هر دو تم
+   دقیقاً همان مقادیر فعلی تم‌ها هستند؛ فقط منبع انتخابشان عوض شده است
+   تا خانه و هر سه تم مقاله، نوار پیشرفت، کارت‌های حاشیه، جدول‌ها،
+   نقل‌قول‌ها و اینفوگرافیک‌ها در تم انتخابی هم خوانا بمانند. */
+:root[data-theme="dark"]{--bg:#0f1513; --paper:#161e1b; --ink:#e9edea; --ink-soft:#c3cdc7; --muted:#93a29a; --line:#2d3833; --line-soft:#232d29; --teal:#4cc2ae; --teal-deep:#8fd8ca; --teal-wash:#182c26; --ochre:#dfa94e; --ochre-wash:#2b2415; --shadow:0 4px 16px rgba(0,0,0,.35); color-scheme:dark}
+:root[data-theme="light"]{--bg:#fafaf7; --paper:#ffffff; --ink:#17211d; --ink-soft:#3d4a44; --muted:#6d7a73; --line:#ddd9cb; --line-soft:#eae7db; --teal:#0d6a5c; --teal-deep:#084f44; --teal-wash:#e6f1ed; --ochre:#9a6206; --ochre-wash:#f7ecd2; --shadow:0 4px 16px rgba(23,33,29,.08); color-scheme:light}
+html[data-theme="dark"] .theme-note-1{--bg:#0f1513; --paper:#161e1b; --ink:#e9edea; --ink-soft:#c3cdc7; --muted:#93a29a; --line:#2c3833; --line-soft:#232d29; --teal:#4cc2ae; --teal-deep:#8fd8ca; --teal-wash:#1a2b26; --amber:#dfa94e; --amber-wash:#2b2417; --red:#e08a7c; --red-wash:#2e201c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 32px rgba(0,0,0,.35)}
+html[data-theme="light"] .theme-note-1{--bg:#f6f5f1; --paper:#fffefa; --ink:#182420; --ink-soft:#3c4a44; --muted:#68766f; --line:#ddd9cc; --line-soft:#eae7dc; --teal:#0d6a5c; --teal-deep:#0a4f45; --teal-wash:#e7f1ed; --amber:#a96f14; --amber-wash:#f7ecd4; --red:#9c3a2e; --red-wash:#f8e9e5; --shadow:0 1px 2px rgba(24,36,32,.05),0 10px 32px rgba(24,36,32,.07)}
+html[data-theme="dark"] .theme-note-2{--bg:#101615; --bg2:#0c1110; --surface:#18201e; --surface2:#1e2926; --ink:#ece7da; --ink2:#c3cbc4; --muted:#8d9991; --teal:#7fc7ba; --teal2:#9ad8cc; --ochre:#e0aa4e; --ochre-soft:#3a2f18; --line:#2c3a36; --line2:#3d504a; --quote-bg:#0a3531; --quote-ink:#f2ecdd; --shadow:0 10px 34px rgba(0,0,0,.35)}
+html[data-theme="light"] .theme-note-2{--bg:#f6f2ea; --bg2:#efe8da; --surface:#fffdf8; --surface2:#f1ebdf; --ink:#1c2422; --ink2:#46524e; --muted:#77807a; --teal:#0e4f4a; --teal2:#14665e; --ochre:#a96f14; --ochre-soft:#f3e3c2; --line:#ddd3bf; --line2:#cbbfa4; --quote-bg:#0e4f4a; --quote-ink:#f2ecdd; --shadow:0 10px 34px rgba(28,36,34,.10)}
+html[data-theme="dark"] .theme-note-2 .ig-center{color:#0d2422}
+html[data-theme="light"] .theme-note-2 .ig-center{color:#f6f1e3}
+html[data-theme="dark"] .theme-note-2 .case-btns button[aria-pressed="true"]{color:#0d2422}
+html[data-theme="light"] .theme-note-2 .case-btns button[aria-pressed="true"]{color:#f6f1e3}
+html[data-theme="dark"] .theme-note-2 .tag.yes{background:#173d2a; color:#9fe0bb}
+html[data-theme="light"] .theme-note-2 .tag.yes{background:#dcefe4; color:#14532d}
+html[data-theme="dark"] .theme-note-2 .tag.no{background:#472219; color:#f0a894}
+html[data-theme="light"] .theme-note-2 .tag.no{background:#f6dcd6; color:#7c2415}
+html[data-theme="dark"] .theme-note-1-appendix{--bg:#0f1412; --surface:#171d1a; --surface2:#1e2622; --ink:#e9ede8; --ink2:#c9d2ca; --muted:#97a59b; --accent:#4ec9b2; --accent-soft:#17332c; --amber:#e3ac45; --amber-soft:#33270e; --line:#2c362f; --quote-bg:#14231e; --quote-line:#4ec9b2; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark}
+html[data-theme="light"] .theme-note-1-appendix{--bg:#f6f2ea; --surface:#fffdf7; --surface2:#efe9db; --ink:#1d2420; --ink2:#3c453f; --muted:#68736a; --accent:#0d6a5c; --accent-soft:#e3efe9; --amber:#9a6206; --amber-soft:#f7ecd2; --line:#ddd3bf; --quote-bg:#eaf2ec; --quote-line:#0d6a5c; --shadow:0 10px 30px rgba(29,36,32,.08); color-scheme:light}
+
+/* دکمهٔ تم در نوار خانه: دقیقاً هم‌اندازه و هم‌سبک آیکون‌های کناری‌اش */
+.iconbar button{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;color:var(--ink-soft);background:none;border:0;padding:0;cursor:pointer;font:inherit}
+.iconbar button:hover,.iconbar button:focus-visible{background:var(--teal-wash);color:var(--teal-deep)}
+.iconbar button svg{width:19px;height:19px;flex:none}
+@media (max-width:640px){.iconbar button{width:44px;height:44px}}
+
+/* آیکون دکمهٔ تم: در تم روشن ماه دیده می‌شود (رفتن به تیره) و در تم
+   تیره خورشید؛ وقتی انتخابی ذخیره نشده، از تم سیستم پیروی می‌کند. */
+.theme-toggle .icon-sun{display:none}
+html[data-theme="dark"] .theme-toggle .icon-sun{display:block}
+html[data-theme="dark"] .theme-toggle .icon-moon{display:none}
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]) .theme-toggle .icon-sun{display:block}
+  html:not([data-theme="light"]) .theme-toggle .icon-moon{display:none}
+  html[data-theme="light"] .theme-toggle .icon-sun{display:none}
+  html[data-theme="light"] .theme-toggle .icon-moon{display:block}
+}
+</style>
 </head>
 <body>
 <!-- نوار پیشرفت خواندن: عنصری دائمی در بدنهٔ صفحه است و با رندر هر مقاله از نو ساخته نمی‌شود -->
 <div id="progress" aria-hidden="true" hidden></div>
 <div id="homeView">
 
-<!-- نوار آیکونی: فقط سه آیکونِ کوچک، بدون متن؛ هنگام اسکرول رو به پایین پنهان می‌شود و با اسکرول رو به بالا برمی‌گردد. -->
+<!-- نوار آیکونی: آیکون‌های کوچکِ بدون متن، به‌همراه دکمهٔ تم روشن/تیره؛ هنگام اسکرول رو به پایین پنهان می‌شود و با اسکرول رو به بالا برمی‌گردد. -->
 <div class="iconbar" id="iconbar">
   <nav class="iconbar-in" aria-label="ناوبری صفحه">
     <a href="#top" aria-label="آغاز صفحه" title="آغاز صفحه">
@@ -684,6 +774,10 @@ html{-webkit-text-size-adjust:100%}
     <a href="#decisions" aria-label="تصمیم‌های باز" title="تصمیم‌های باز">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l2 2 4-4"/><path d="M3 7l2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
     </a>
+    <button type="button" class="theme-toggle" aria-label="تغییر به تم تیره" aria-pressed="false" title="تم تیره">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
   </nav>
 </div>
 
@@ -896,6 +990,8 @@ html{-webkit-text-size-adjust:100%}
 
   var ICON_HOME = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
   var ICON_LIST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
+  var ICON_THEME = '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>' +
+    '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
 
   function esc(s){
     return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -909,6 +1005,7 @@ html{-webkit-text-size-adjust:100%}
     return '<nav class="site-nav" id="siteNav" aria-label="ناوبری سایت"><div class="site-nav-inner">' +
       '<a href="#/" aria-label="خانهٔ یادداشت‌ها" title="خانهٔ یادداشت‌ها">' + ICON_HOME + '</a>' +
       '<button type="button" data-action="toc" aria-label="فهرست این مقاله" title="فهرست این مقاله">' + ICON_LIST + '</button>' +
+      '<button type="button" class="theme-toggle" data-action="theme" aria-label="تغییر به تم تیره" aria-pressed="false" title="تم تیره">' + ICON_THEME + '</button>' +
       '</div></nav>';
   }
   /* اسکرول مستقیم به فهرست مقالهٔ جاری؛ تنها راه رسیدن به فهرست، همین است
@@ -1142,6 +1239,7 @@ html{-webkit-text-size-adjust:100%}
       });
     }
     watchNav();
+    if(window.__syncThemeButtons) window.__syncThemeButtons();
     updateProgress();
   }
 
