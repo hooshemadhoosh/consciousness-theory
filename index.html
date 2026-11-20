@@ -995,6 +995,15 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:none}
   var articleRoot = document.getElementById('articleRoot');
   var bySlug = {};
   (window.NOTES || []).forEach(function(n){ if(n.slug) bySlug[n.slug] = n; });
+  /* نام‌های مستعارِ نشانی: #/appendix همان پیوستِ یادداشت ۱ است و باید
+     دقیقاً مثل #/note-1-appendix باز شود. resolveSlug هر دو جا (روتر و
+     شنوندهٔ کلیک) استفاده می‌شود تا مستعار در هر دو مسیر یکسان کار کند. */
+  var ALIASES = { 'appendix': 'note-1-appendix' };
+  function resolveSlug(s){
+    if(bySlug[s]) return s;
+    var t = ALIASES[s];
+    return (t && bySlug[t]) ? t : null;
+  }
   var cache = {};
   var currentView = 'home';
   var currentSlug = null;
@@ -1322,9 +1331,10 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:none}
      مثل دکمهٔ خانه عمل می‌کرد: هش #toc می‌شد و روتر خانه را نشان می‌داد. */
   function route(){
     var m = location.hash.match(/^#\/([\w-]+)/);
-    if(m && bySlug[m[1]]){
-      if(currentView === 'article' && currentSlug === m[1]) return;
-      showArticle(m[1]);
+    var slug = m ? resolveSlug(m[1]) : null;
+    if(slug){
+      if(currentView === 'article' && currentSlug === slug) return;
+      showArticle(slug);
     }
     else if(location.hash === '' || location.hash === '#/' || location.hash === '#'){
       if(currentView !== 'home') showHome();
@@ -1363,10 +1373,11 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:none}
     var href = a.getAttribute('href');
     if(!href || href.charAt(0) !== '#') return;
     var rm = href.match(/^#\/([\w-]+)/);
-    if(rm && bySlug[rm[1]]){
+    var rslug = rm ? resolveSlug(rm[1]) : null;
+    if(rslug){
       e.preventDefault(); e.stopPropagation();
-      if(!(currentView === 'article' && currentSlug === rm[1])) showArticle(rm[1]);
-      setHash('#/' + rm[1]);
+      if(!(currentView === 'article' && currentSlug === rslug)) showArticle(rslug);
+      setHash('#/' + rslug);
       return;
     }
     if(href === '#/'){
