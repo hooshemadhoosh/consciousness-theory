@@ -55,9 +55,12 @@
 <title>یادداشت‌های نظریهٔ آگاهی — خانه</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800;900&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
 <style>
+/* Arad (فونت آراد) — خود میزبان (self-hosted)، مجوز SIL OFL 1.1 */
+@font-face{font-family:"Arad";src:url("assets/fonts/Arad-VF.woff2") format("woff2");font-weight:100 800;font-style:normal;font-display:swap}
+@font-face{font-family:"Arad";src:url("assets/fonts/Arad-ExtraBold.woff2") format("woff2");font-weight:900;font-style:normal;font-display:swap}
 :root{
   --bg:#fafaf7; --paper:#ffffff;
   --ink:#17211d; --ink-soft:#3d4a44; --muted:#6d7a73;
@@ -80,7 +83,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;line-height:1.7;font-size:15.5px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Arad",Tahoma,system-ui,sans-serif;line-height:1.7;font-size:15.5px}
 a{color:var(--teal)}
 img{display:block;max-width:100%}
 .wrap{max-width:720px;margin:0 auto;padding:60px 16px 20px}
@@ -175,7 +178,7 @@ footer p{margin:0}
   .theme-note-1{--bg:#0f1513; --paper:#161e1b; --ink:#e9edea; --ink-soft:#c3cdc7; --muted:#93a29a; --line:#2c3833; --line-soft:#232d29; --teal:#4cc2ae; --teal-deep:#8fd8ca; --teal-wash:#1a2b26; --amber:#dfa94e; --amber-wash:#2b2417; --red:#e08a7c; --red-wash:#2e201c; --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 32px rgba(0,0,0,.35);}
 }
 .theme-note-1, .theme-note-1 *{box-sizing:border-box}
-.theme-note-1{margin:0; background:var(--bg); color:var(--ink); font-family:"Vazirmatn",Tahoma,system-ui,sans-serif; font-size:17px; line-height:2.05; -webkit-font-smoothing:antialiased;}
+.theme-note-1{margin:0; background:var(--bg); color:var(--ink); font-family:"Arad",Tahoma,system-ui,sans-serif; font-size:17px; line-height:2.05; -webkit-font-smoothing:antialiased;}
 .theme-note-1 ::selection{background:var(--teal); color:#fff}
 .theme-note-1 .wrap{max-width:780px; margin:0 auto; padding:0 20px}
 .theme-note-1 .wide{max-width:1020px; margin:0 auto; padding:0 20px}
@@ -214,7 +217,7 @@ footer p{margin:0}
 .theme-note-1 blockquote{margin:24px 0; padding:18px 24px; background:var(--teal-wash); border-radius:12px; font-size:1.05rem; line-height:2.15;}
 .theme-note-1 blockquote .src{display:block; margin-top:10px; font-size:.86rem; color:var(--muted); line-height:1.9}
 .theme-note-1 blockquote.en-q{direction:ltr; text-align:left; font-family:Georgia,serif; font-size:1.02rem; line-height:1.75}
-.theme-note-1 blockquote.en-q .src{direction:rtl; text-align:right; font-family:"Vazirmatn",Tahoma,sans-serif}
+.theme-note-1 blockquote.en-q .src{direction:rtl; text-align:right; font-family:"Arad",Tahoma,sans-serif}
 .theme-note-1 .callout{margin:24px 0; padding:18px 22px; border-radius:12px; font-size:.98rem; line-height:2;}
 .theme-note-1 .callout.warn{background:var(--red-wash); border:1px solid var(--line)}
 .theme-note-1 .callout.warn .t{color:var(--red); font-weight:800}
@@ -247,7 +250,7 @@ footer p{margin:0}
 .theme-note-1 .infobox .cap{font-weight:800; font-size:1.02rem; margin:0 0 4px}
 .theme-note-1 .infobox .sub{font-size:.88rem; color:var(--muted); margin:0 0 16px; line-height:1.9}
 .theme-note-1 .infobox svg{width:100%; height:auto; display:block}
-.theme-note-1 .svg-label{font-family:"Vazirmatn",Tahoma,sans-serif}
+.theme-note-1 .svg-label{font-family:"Arad",Tahoma,sans-serif}
 .theme-note-1 /* طیف شدت رد */
   .scale{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:6px}
 .theme-note-1 .scale .step{border-radius:10px; padding:12px 12px 10px; border:1px solid var(--line-soft); background:var(--bg)}
@@ -305,7 +308,7 @@ footer p{margin:0}
   .theme-note-2{--bg:#101615; --bg2:#0c1110; --surface:#18201e; --surface2:#1e2926; --ink:#ece7da; --ink2:#c3cbc4; --muted:#8d9991; --teal:#7fc7ba; --teal2:#9ad8cc; --ochre:#e0aa4e; --ochre-soft:#3a2f18; --line:#2c3a36; --line2:#3d504a; --quote-bg:#0a3531; --quote-ink:#f2ecdd; --shadow:0 10px 34px rgba(0,0,0,.35);}
 }
 .theme-note-2, .theme-note-2 *{box-sizing:border-box}
-.theme-note-2{margin:0;background:var(--bg);color:var(--ink);font-family:"Vazirmatn",system-ui,sans-serif;font-size:17px;line-height:2;-webkit-font-smoothing:antialiased}
+.theme-note-2{margin:0;background:var(--bg);color:var(--ink);font-family:"Arad",system-ui,sans-serif;font-size:17px;line-height:2;-webkit-font-smoothing:antialiased}
 .theme-note-2 button{font-family:inherit;min-height:44px}
 .theme-note-2 a{color:var(--teal)}
 .theme-note-2 .wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
@@ -338,7 +341,7 @@ footer p{margin:0}
 .theme-note-2 .defbox p{font-size:1.08rem;line-height:2;font-weight:600;margin-bottom:12px}
 .theme-note-2 /* نقل‌قول عین متن */
   blockquote.exact{margin:26px 0;background:var(--quote-bg);color:var(--quote-ink);border-radius:var(--radius);padding:26px 28px 18px}
-.theme-note-2 blockquote.exact p{font-family:"Noto Naskh Arabic","Vazirmatn",serif;font-size:1.12rem;line-height:2.1;margin-bottom:10px}
+.theme-note-2 blockquote.exact p{font-family:"Noto Naskh Arabic","Arad",serif;font-size:1.12rem;line-height:2.1;margin-bottom:10px}
 .theme-note-2 blockquote.exact p[dir="ltr"]{font-family:Georgia,"Times New Roman",serif;font-size:1.04rem;line-height:1.85;text-align:left}
 .theme-note-2 blockquote.exact footer{font-size:.85rem;opacity:.85;line-height:1.8;border-top:1px solid rgba(242,236,221,.25);padding-top:10px;margin-top:6px}
 .theme-note-2 .pull{font-size:1.28rem;line-height:2;font-weight:800;color:var(--teal);text-align:center;margin:38px auto;max-width:620px}
@@ -448,7 +451,7 @@ footer p{margin:0}
   .theme-note-1-appendix{--bg:#0f1412; --surface:#171d1a; --surface2:#1e2622; --ink:#e9ede8; --ink2:#c9d2ca; --muted:#97a59b; --accent:#4ec9b2; --accent-soft:#17332c; --amber:#e3ac45; --amber-soft:#33270e; --line:#2c362f; --quote-bg:#14231e; --quote-line:#4ec9b2; --shadow:0 10px 30px rgba(0,0,0,.35); color-scheme:dark;}
 }
 .theme-note-1-appendix, .theme-note-1-appendix *{box-sizing:border-box}
-.theme-note-1-appendix{margin:0;background:var(--bg);color:var(--ink); font-family:"Vazirmatn",Tahoma,system-ui,sans-serif; font-size:17.5px;line-height:2.05;-webkit-font-smoothing:antialiased}
+.theme-note-1-appendix{margin:0;background:var(--bg);color:var(--ink); font-family:"Arad",Tahoma,system-ui,sans-serif; font-size:17.5px;line-height:2.05;-webkit-font-smoothing:antialiased}
 .theme-note-1-appendix .wrap{max-width:780px;margin:0 auto;padding:0 20px}
 .theme-note-1-appendix .wide{max-width:980px;margin:0 auto;padding:0 20px}
 .theme-note-1-appendix /* سربرگ یادداشت */
@@ -605,7 +608,7 @@ table.cmp{width:100%;border-collapse:collapse;margin:20px 0;font-size:15.5px;lin
   #articleView .biocard-portrait{float:none;width:150px;margin:0 auto 14px}
 }
 @media (prefers-reduced-motion: reduce){#articleView .biocard-chev{transition:none}}
-.article-loading,.article-error{max-width:720px;margin:0 auto;padding:90px 20px 60px;font-family:"Vazirmatn",Tahoma,system-ui,sans-serif;color:var(--ink-soft,#3d4a44);line-height:2}
+.article-loading,.article-error{max-width:720px;margin:0 auto;padding:90px 20px 60px;font-family:"Arad",Tahoma,system-ui,sans-serif;color:var(--ink-soft,#3d4a44);line-height:2}
 @media (prefers-reduced-motion: reduce){.site-nav{transition:none}}
 /* ---------- تصویر صفحهٔ نخست مقالهٔ کلیدی (در متن MDX با کلاس papershot) ----------
    تصویر کوچک و وسط‌چین از صفحهٔ اول مقاله‌ای که ارجاع داده شده است؛ با کلیک
@@ -630,7 +633,7 @@ table.cmp{width:100%;border-collapse:collapse;margin:20px 0;font-size:15.5px;lin
 #articleView .diagram .d-sub{font-size:.85rem;color:var(--muted,#68766f);text-align:center;margin:0 0 14px;line-height:1.9}
 #articleView .diagram svg{width:100%;height:auto;display:block}
 #articleView .diagram figcaption{font-size:.83rem;line-height:1.95;color:var(--muted,#68766f);margin-top:10px;text-align:center;border-top:1px dashed var(--line,#ddd3bf);padding-top:9px}
-#articleView .diagram .svg-label{font-family:"Vazirmatn",Tahoma,sans-serif}
+#articleView .diagram .svg-label{font-family:"Arad",Tahoma,sans-serif}
 #articleView .diagram table.tpm{margin:6px auto 4px;border-collapse:collapse;direction:ltr;font-size:.86rem;line-height:1.6}
 #articleView .diagram table.tpm th,#articleView .diagram table.tpm td{border:1px solid var(--line,#ddd3bf);padding:5px 10px;text-align:center;min-width:44px}
 #articleView .diagram table.tpm th{background:var(--surface2,var(--teal-wash,#eef3f0));font-weight:800}
